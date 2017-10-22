@@ -1,0 +1,10 @@
+#Files
+*.idea
+*.project
+*.classpath
+*.class
+*.iml
+.DS_STORE
+.settings
+out
+bin
