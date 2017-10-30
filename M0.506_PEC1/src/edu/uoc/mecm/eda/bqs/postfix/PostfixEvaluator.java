@@ -10,17 +10,75 @@ import java.util.Stack;
  */
 public class PostfixEvaluator {
 
+	private Stack<Integer> numbers;
+
+	public PostfixEvaluator(){
+		this.numbers = new Stack<Integer>();
+	}
+
 	/**
 	 * Método que evalúa una expresión en notación RPN
 	 * @param expr El string a evaluar
 	 * @return El resultado numérico
 	 */
 	public int evaluatePostfixExpression (String expr) throws ExpressionMismatchException {
-		// TODO: Implementar este método
-		return 0;
+		Integer valueA;
+		Integer valueB;
+	    if(expr==null){
+			throw  new ExpressionMismatchException("The expression can't be null");
+		}
+		Scanner scanner = new Scanner(expr);
+		while (scanner.hasNext()){
+			String currentValue = scanner.next();
+			if(isNumeric(currentValue)){
+				this.numbers.push(Integer.parseInt(currentValue));
+			}else if (isAllowedOperator(currentValue)){
+			    if(this.numbers.size()<2){
+			        throw new ExpressionMismatchException("The expression hasn't enough operators to make the operation");
+                }
+			    switch (currentValue){
+                    case "+":
+                        valueA = this.numbers.pop();
+                        valueB = this.numbers.pop();
+                        this.numbers.push(valueB + valueA);
+                        break;
+                    case "-":
+                        valueA = this.numbers.pop();
+                        valueB = this.numbers.pop();
+                        this.numbers.push(valueB - valueA);
+                        break;
+                    case "/":
+                        valueA = this.numbers.pop();
+                        valueB = this.numbers.pop();
+                        this.numbers.push(valueB / valueA);
+                        break;
+                    case "*":
+                        valueA = this.numbers.pop();
+                        valueB = this.numbers.pop();
+                        this.numbers.push(valueB * valueA);
+                        break;
+                }
+
+			}else{
+				throw  new ExpressionMismatchException("The expression contains invalid characters");
+			}
+		}
+		if(this.numbers.size()> 1){
+		    throw new ExpressionMismatchException("The expression is bad formed, just one result can be reached with this notation");
+        }
+        return this.numbers.pop();
 	}
 
-	
+	private boolean isNumeric(String s) {
+		return s != null && s.matches("\\d*?\\d+");
+	}
+
+	private boolean isAllowedOperator(String s) {
+		return s != null && s.matches("[-+/*]+");
+	}
+
+
+
 	/**
 	 * Método que testea el método evaluatePostfixExpression()
 	 * @param args No toma valores de entrada
@@ -37,8 +95,9 @@ public class PostfixEvaluator {
 								"1 2 +",
 								"1 2 3 * + 4 +",
 								"4 12 28 * + 7 5 / *"
-								};
-		int[] expectedResults = { 18, 25, 6, 82, 3, 11, 340 };
+
+                               };
+		int[] expectedResults = { 18, 25, 6, 82, 3, 11, 340};
 
 		for (int i = 0; i < expressions.length; i++) {
 			int result = m.evaluatePostfixExpression (expressions[i]);
