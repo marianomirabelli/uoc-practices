@@ -107,10 +107,17 @@ public class Infix2Postfix {
 							queue.offer(stackElement);
 						}
 					}
+					if(!foundOpenBracket){
+						throw new ExpressionMismatchException("The brackets are not balanced");
+					}
 				}
 			}
 			while(!stack.isEmpty()){
-    			queue.offer(stack.pop());
+    			String element = stack.pop();
+    			if(element.equalsIgnoreCase("(")){
+					throw new ExpressionMismatchException("The brackets are not balanced");
+				}
+    			queue.offer(element);
 			}
 
 			StringJoiner joiner = new StringJoiner(" ");
@@ -137,7 +144,8 @@ public class Infix2Postfix {
 								"( ( 8 * 5 ) + ( 7 * ( 4 + 2 ) ) )",
 								"( 1 + 2 )",
 								"( 1 + ( 2 * 3 ) + 4 )",
-								"( ( ( 4 + ( 12 * 28 ) ) ) * ( 7 / 5 ) )",
+								"( ( ( 4 + ( 12 * 28 ) ) ) * ( 7 / 5 ) )"
+
 								};
 
 		String[] expectedResults = {	"6 8 2 / 1 - *",
