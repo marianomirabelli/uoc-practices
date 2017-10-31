@@ -110,6 +110,8 @@ public class Infix2Postfix {
 					if(!foundOpenBracket){
 						throw new ExpressionMismatchException("The brackets are not balanced");
 					}
+				}else {
+					throw new ExpressionMismatchException("The input string is not invalid");
 				}
 			}
 			while(!stack.isEmpty()){
@@ -146,6 +148,7 @@ public class Infix2Postfix {
 								"( 1 + ( 2 * 3 ) + 4 )",
 								"( ( ( 4 + ( 12 * 28 ) ) ) * ( 7 / 5 ) )"
 
+
 								};
 
 		String[] expectedResults = {	"6 8 2 / 1 - *",
@@ -154,7 +157,8 @@ public class Infix2Postfix {
 									"8 5 * 7 4 2 + * +",
 									"1 2 +",
 									"1 2 3 * + 4 +",
-									"4 12 28 * + 7 5 / *",
+									"4 12 28 * + 7 5 / *"
+
 									};
 
 		for (int i = 0; i < expressions.length; i++) {
