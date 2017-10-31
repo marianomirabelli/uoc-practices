@@ -1,8 +1,6 @@
 package edu.uoc.mecm.eda.bqs.postfix;
 
-import java.util.Queue;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -12,6 +10,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class Infix2Postfix {
 
+	private Stack<String>  stack;
+	private Queue<String> queue;
+
+	public Infix2Postfix(){
+
+		this.queue = new LinkedList<String>();
+		this.stack = new Stack<String>();
+	}
 	/**
 	 * Función de utilidad que devuelve la precedencia de un operador sobre otro
 	 * @param ch Operador
@@ -46,6 +52,20 @@ public class Infix2Postfix {
         }
         return true;
     }
+
+	private boolean isOperator (String expr) {
+		return  (expr.equalsIgnoreCase("+") || expr.equalsIgnoreCase("-")
+				 || expr.equalsIgnoreCase("*") || expr.equalsIgnoreCase("/")
+				 || expr.equalsIgnoreCase("^"));
+	}
+
+	private boolean precedenseAIsGraterThanB(String a, String b){
+    	char charA = a.charAt(0);
+    	char charB = b.charAt(0);
+
+    	return precedence(charA) > precedence(charB);
+
+	}
     
     /**
      * Función para transformar una expresión en notación infija a notación RPL
@@ -54,8 +74,49 @@ public class Infix2Postfix {
      * @throws ExpressionMismatchException Si la expresión es inválida
      */
     public String transform (String expr) throws ExpressionMismatchException {
-    		// TODO: Implementar este método
-    		return "";
+    		if(expr == null){
+    			throw  new ExpressionMismatchException("The input expression can't be null");
+			}
+    		Scanner scanner = new Scanner(expr);
+    		while(scanner.hasNext()){
+				String currentValue = scanner.next();
+				if(isNumeric(currentValue)){
+					queue.offer(currentValue);
+				}else if (isOperator(currentValue)){
+					if(stack.isEmpty() || precedenseAIsGraterThanB(currentValue,stack.peek())){
+						stack.push(currentValue);
+					}else{
+						while(!stack.isEmpty() && precedenseAIsGraterThanB(currentValue,stack.peek()) ){
+							queue.offer(stack.pop);
+						}
+						if(!stack.isEmpty()){
+							queue.offer(currentValue);
+							queue.offer(stack.pop());
+
+						}
+					}
+				}else if(currentValue.equalsIgnoreCase("(")){
+					stack.push(currentValue);
+				}else if(currentValue.equalsIgnoreCase(")")){
+					boolean foundOpenBracket = false;
+					while(!stack.isEmpty() && !foundOpenBracket){
+						String stackElement =stack.pop();
+						if(stackElement.equalsIgnoreCase("(")){
+							foundOpenBracket = true;
+						}
+					}
+				}
+			}
+			while(!stack.isEmpty()){
+    			queue.offer(stack.pop());
+			}
+
+			StringBuilder builder = new StringBuilder();
+			while(!queue.isEmpty()){
+				builder.append(queue.poll());
+			}
+
+			return builder.toString();
     }
 
     
