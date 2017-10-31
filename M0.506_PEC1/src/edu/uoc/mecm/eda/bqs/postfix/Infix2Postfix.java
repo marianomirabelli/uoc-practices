@@ -86,14 +86,14 @@ public class Infix2Postfix {
 					if(stack.isEmpty() || precedenseAIsGraterThanB(currentValue,stack.peek())){
 						stack.push(currentValue);
 					}else{
-						while(!stack.isEmpty() && precedenseAIsGraterThanB(currentValue,stack.peek()) ){
-							queue.offer(stack.pop);
+						while(!stack.isEmpty() && !precedenseAIsGraterThanB(currentValue,stack.peek()) ){
+							String operator =stack.pop();
+							if(isOperator(operator)){
+								queue.offer(operator);
+							}
 						}
-						if(!stack.isEmpty()){
-							queue.offer(currentValue);
-							queue.offer(stack.pop());
+						stack.push(currentValue);
 
-						}
 					}
 				}else if(currentValue.equalsIgnoreCase("(")){
 					stack.push(currentValue);
@@ -103,6 +103,8 @@ public class Infix2Postfix {
 						String stackElement =stack.pop();
 						if(stackElement.equalsIgnoreCase("(")){
 							foundOpenBracket = true;
+						}else{
+							queue.offer(stackElement);
 						}
 					}
 				}
@@ -111,12 +113,12 @@ public class Infix2Postfix {
     			queue.offer(stack.pop());
 			}
 
-			StringBuilder builder = new StringBuilder();
+			StringJoiner joiner = new StringJoiner(" ");
 			while(!queue.isEmpty()){
-				builder.append(queue.poll());
+				joiner.add(queue.poll());
 			}
 
-			return builder.toString();
+			return joiner.toString();
     }
 
     
