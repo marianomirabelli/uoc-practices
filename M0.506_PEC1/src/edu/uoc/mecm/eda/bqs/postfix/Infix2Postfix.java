@@ -122,12 +122,17 @@ public class Infix2Postfix {
     			queue.offer(element);
 			}
 
-			StringJoiner joiner = new StringJoiner(" ");
+			StringBuilder builder = new StringBuilder();
+			if(!queue.isEmpty()){
+				builder.append(queue.poll());
+
+			}
 			while(!queue.isEmpty()){
-				joiner.add(queue.poll());
+				builder.append(" ");
+				builder.append(queue.poll());
 			}
 
-			return joiner.toString();
+			return builder.toString();
     }
 
     
