@@ -19,9 +19,12 @@ public class TitleAndYearFilter implements Comparator<Book> {
 	 */
 	@Override
 	public int compare (Book o1, Book o2) {
-		// TODO: Tu codigo a partir de aquí
-
-		return 0;
+		int titleComparision = o1.getTitle().compareToIgnoreCase(o2.getTitle());
+		if(titleComparision == 0){
+			return Integer.compare(o1.getYear(), o2.getYear());
+		}else{
+			return titleComparision;
+		}
 	}
 	
 	/**

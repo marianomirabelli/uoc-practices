@@ -146,9 +146,7 @@ public class Book implements Comparable<Book> {
 	public int compareTo (Book o) {
 		int titleComparison = this.title.compareToIgnoreCase(o.title);
 		if(titleComparison == 0){
-			String thisBookYear = String.valueOf(this.year);
-			String oBookYear = String.valueOf(o.year);
-			int yearComparison = thisBookYear.compareToIgnoreCase(oBookYear);
+			int yearComparison = Integer.compare(this.year,o.year);
 			if(yearComparison == 0){
 				int publisherComparision = this.publisher.compareToIgnoreCase(o.publisher);
 				if(publisherComparision == 0){
