@@ -21,17 +21,15 @@ import edu.uoc.mecm.eda.utils.QuickSort;
  */
 public class LibraryExperiment {
 
-	private static final String pathComparatorExperiment = "result/bookcomparator.tsv";
+	private static final String pathComparatorExperiment = "result/bookcomparator_2.tsv";
 		
 	/**
 	 * Ejecuta el benchmark
 	 * @throws IOException Si no se puede escribir el fichero con los resultados de salida
 	 */
-	protected static void runExperimentComparator() throws IOException, InterruptedException {
+	protected static void runExperimentComparator() throws IOException {
 			
-		double averageTimeQuickSort = 0;
-		double averageTimeMergeSort = 0;
-		double averageTimeArraysSort = 0;
+
 		
 		BufferedWriter writer = null;
 
@@ -44,7 +42,12 @@ public class LibraryExperiment {
 		    
 		    int librarySize = 10;
 	    	while(librarySize <= 10000000 ) {
-				for (int i = 0; i < 30; i++) {
+
+				double averageTimeQuickSort = 0;
+				double averageTimeMergeSort = 0;
+				double averageTimeArraysSort = 0;
+
+	    		for (int i = 0; i < 30; i++) {
 
 					System.out.print("Generating " + librarySize + " random books...");
 					Book[] originalLibrary = GenerateRandomData.getRandomLibrary(librarySize);
@@ -76,7 +79,6 @@ public class LibraryExperiment {
 				writer.write("SZ: " + librarySize + "\tMS: " + averageTimeMergeSort / 30 + "\tQS: " + averageTimeQuickSort / 30 + "\tAS: " + averageTimeArraysSort / 30 + "\n");
 				writer.flush();
 				librarySize*=10;
-				Thread.sleep(2000);
 			}
 		    // Finalizamos el experimento
 		    long tfin = System.currentTimeMillis() - tini;
@@ -99,11 +101,8 @@ public class LibraryExperiment {
 		
 		System.out.println ("Book title and year sort benckmark has started...");
 		try {
-			try {
-				runExperimentComparator();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			runExperimentComparator();
+
 		} catch (IOException e) {
 			System.err.println ("The benchmark has failed.");
 			e.printStackTrace();
