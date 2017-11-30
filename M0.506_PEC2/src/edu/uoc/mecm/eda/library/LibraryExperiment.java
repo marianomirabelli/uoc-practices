@@ -27,7 +27,7 @@ public class LibraryExperiment {
 	 * Ejecuta el benchmark
 	 * @throws IOException Si no se puede escribir el fichero con los resultados de salida
 	 */
-	protected static void runExperimentComparator() throws IOException {
+	protected static void runExperimentComparator() throws IOException, InterruptedException {
 			
 		double averageTimeQuickSort = 0;
 		double averageTimeMergeSort = 0;
@@ -42,28 +42,42 @@ public class LibraryExperiment {
 		    // Inicializamos la variable de tiempo inicial
 		    long tini = System.currentTimeMillis();
 		    
-		    int librarySize = 100;
-	    	
-		    System.out.print ("Generating " + librarySize + " random books...");
-    			Book[] originalLibrary = GenerateRandomData.getRandomLibrary (librarySize);
-    			System.out.println ("generated!");
-		    		
-    			// Copiamos el vector generado
-    			Book[] aux1 = Arrays.copyOf (originalLibrary, librarySize);
+		    int librarySize = 10;
+	    	while(librarySize <= 10000000 ) {
+				for (int i = 0; i < 30; i++) {
 
-    			// Empezamos a medir el tiempo de ordenacion
-    			long t1 = System.currentTimeMillis();
-		    		
-		    // Ordenamos con mergesort y calculamos tiempo que ha tardado
-		    MergeSort.sort (aux1, new TitleAndYearFilter());
-		    averageTimeMergeSort += ((double) (System.currentTimeMillis() - t1));
-		    		
-		    // Hacemos lo mismo con el resto de algoritmos de ordenacion...
-		    
-  		    // Escribimos el tamaño y los resultados de realizar la ordenacion con MergeSort, QuickSort y Arrays.sort() 
-		    writer.write ("SZ: " + librarySize + "\tMS: " + averageTimeMergeSort + "\tQS: " + averageTimeQuickSort + "\tAS: " +  averageTimeArraysSort + "\n" );
-			writer.flush();
-		    
+					System.out.print("Generating " + librarySize + " random books...");
+					Book[] originalLibrary = GenerateRandomData.getRandomLibrary(librarySize);
+					System.out.println("generated!");
+
+					// Copiamos el vector generado
+					Book[] aux1 = Arrays.copyOf(originalLibrary, librarySize);
+					Book[] quickSortLibrary = Arrays.copyOf(originalLibrary, librarySize);
+					Book[] arraySortLibrary = Arrays.copyOf(originalLibrary, librarySize);
+
+					// Empezamos a medir el tiempo de ordenacion
+					long t1 = System.currentTimeMillis();
+
+					// Ordenamos con mergesort y calculamos tiempo que ha tardado
+					MergeSort.sort(aux1, new TitleAndYearFilter());
+					averageTimeMergeSort += ((double) (System.currentTimeMillis() - t1));
+
+					// Hacemos lo mismo con el resto de algoritmos de ordenacion...
+
+					long quickSortInitialTime = System.currentTimeMillis();
+					QuickSort.sort(quickSortLibrary, new TitleAndYearFilter());
+					averageTimeQuickSort += ((double) (System.currentTimeMillis() - quickSortInitialTime));
+
+					long arraySortInitialTime = System.currentTimeMillis();
+					Arrays.sort(arraySortLibrary, new TitleAndYearFilter());
+					averageTimeArraysSort += ((double) (System.currentTimeMillis() - arraySortInitialTime));
+				}
+				// Escribimos el tamaño y los resultados de realizar la ordenacion con MergeSort, QuickSort y Arrays.sort()
+				writer.write("SZ: " + librarySize + "\tMS: " + averageTimeMergeSort / 30 + "\tQS: " + averageTimeQuickSort / 30 + "\tAS: " + averageTimeArraysSort / 30 + "\n");
+				writer.flush();
+				librarySize*=10;
+				Thread.sleep(2000);
+			}
 		    // Finalizamos el experimento
 		    long tfin = System.currentTimeMillis() - tini;
 			System.out.println ("Total time: " + tfin + " ms");
@@ -85,7 +99,11 @@ public class LibraryExperiment {
 		
 		System.out.println ("Book title and year sort benckmark has started...");
 		try {
-			runExperimentComparator();
+			try {
+				runExperimentComparator();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
 			System.err.println ("The benchmark has failed.");
 			e.printStackTrace();
