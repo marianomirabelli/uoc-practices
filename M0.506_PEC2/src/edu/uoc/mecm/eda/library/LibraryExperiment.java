@@ -21,7 +21,7 @@ import edu.uoc.mecm.eda.utils.QuickSort;
  */
 public class LibraryExperiment {
 
-	private static final String pathComparatorExperiment = "result/bookcomparator_2.tsv";
+	private static final String pathComparatorExperiment = "result/bookcomparator.tsv";
 		
 	/**
 	 * Ejecuta el benchmark
