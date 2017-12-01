@@ -1,0 +1,51 @@
+Se ordena desde el que menos tiempo toma al que mas tiempo toma
+
+Primera Ejecuccion
+
+Para 10 --> AS, QS, MS
+Para 100 --> AS = MS, QS
+Para 1.000 --> MS = QS, AS
+para 10.000 --> MS, QS, AS
+para 100.000 --> AS, MS, QS
+para 1.000.000 --> AS, MS, QS
+para 10.000.000 --> AS, MS, QS
+
+Segunda Ejecuccion
+
+Para 10 --> MS, QS, AS
+Para 100 --> AS, MS, QS
+Para 1.000 --> QS, AS, MS
+para 10.000 --> MS, QS, AS
+para 100.000 --> AS, MS, QS
+para 1.000.000 --> AS, MS, QS
+para 10.000.000 --> AS, QS, MS
+
+Tercera Ejecuccion
+
+Para 10 --> MS, QS = AS
+Para 100 --> AS, QS, MS
+Para 1.000 --> QS, AS, MS
+para 10.000 --> MS, QS, AS
+para 100.000 -->  MS, AS, QS
+para 1.000.000 --> AS, MS, QS
+para 10.000.000 --> AS, MS, QS
+
+Cuarta Ejecuccion
+
+Para 10 --> AS, MS, QS
+Para 100 --> MS, AS, QS
+Para 1.000 --> AS, QS, MS
+para 10.000 --> MS, QS, AS
+para 100.000 -->  AS, MS, QS
+para 1.000.000 --> AS, MS, QS
+para 10.000.000 --> AS, MS, QS
+
+Quinta Ejecucion
+
+Para 10 --> MS, QS, AS
+Para 100 --> AS = QS, MS
+Para 1.000 --> AS, MS, QS
+para 10.000 --> QS, MS, AS
+para 100.000 -->  AS, MS, QS
+para 1.000.000 --> AS, QS, MS
+para 10.000.000 --> AS, QS, MS
