@@ -1,6 +1,7 @@
 package edu.uoc.mecm.eda.utils;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * Clase que implementa un BST de enteros
@@ -10,6 +11,7 @@ import java.util.NoSuchElementException;
 public class IntegerBST {
     // Nodo raíz del BST
 	private Node root;
+	private Integer maxValue = Integer.MIN_VALUE;
 	
     /**
      * Clase privada que encapsula un nodo del árbol
@@ -19,7 +21,7 @@ public class IntegerBST {
     private class Node {    
     		// El valor del nodo
     		private Integer value;
-        
+
     		// Subárboles izquierdo y derecho
     		private Node left, right;
 
@@ -28,6 +30,7 @@ public class IntegerBST {
             this.value = value;
         }
     }
+
 
     /**
      * Busca en el BST por un valor determinado y devuelve cierto si lo ha encontrado
@@ -42,7 +45,7 @@ public class IntegerBST {
         if (x == null) {
         	return null;
         }
-        
+
         int cmp = value.compareTo (x.value);
         
         if	(cmp < 0) {
@@ -62,7 +65,10 @@ public class IntegerBST {
      * @param value Entero a insertar
      */
     public void put (Integer value) {
-        root = put (root, value);
+		if(maxValue.compareTo(value)==-1){
+			maxValue = value;
+		}
+    	root = put (root, value);
     }
 
     private Node put (Node x, Integer value) {
@@ -97,7 +103,14 @@ public class IntegerBST {
      * @param x El nodo a partir del cual se aplica el mirroring
      */
     private void mirror (Node x) {
-    	// TODO: Implementar este método
+    	if(!Objects.isNull(x)){
+			mirror(x.left);
+			mirror(x.right);
+    		Node temp = x.left;
+			x.left = x.right;
+			x.right = temp;
+		}
+
     }
 
     /**
@@ -117,8 +130,8 @@ public class IntegerBST {
      * @return El valor mínimo del árbol
      */
     public int getNewMax() {
-    	// TODO: Implementar este método
-    	return 0;
+
+    	return maxValue;
     }
     
     /**
