@@ -21,7 +21,12 @@ public class PresidentialElection {
 
 		String winner = "";
 		int maxValue = 0;
-		Map<String,Integer> candidates = new TreeMap<String,Integer>();
+		Map<String,Integer> candidates = new TreeMap<String,Integer>(new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				return o2.compareTo(o1);
+			}
+		});
 		for(String vote :votes){
 			Integer cant = candidates.get(vote);
 			if(Objects.isNull(cant)){
