@@ -1,5 +1,7 @@
 package edu.uoc.mecm.eda.path;
 
+import java.util.PriorityQueue;
+
 /**
  * Clase que aplica el algoritmo de Dijkstra a una matriz de adyacencia y muestra el camino
  * @author Carles Pairot Gavaldà
@@ -78,8 +80,14 @@ public class PathPrinter {
 	public String printSolutionWithPath() {
 	    StringBuffer sb = new StringBuffer();
 	    sb.append ("Vertex\t\tDistance\tPath\n");
+			for(int i =1; i < V; i++){
+				String line =src+" -> "+i+"\t\t "+this.dist[i]+"\t\t"+src+" "+this.printPath(i)+"\n";
+				sb.append (line);
+			}
+			return sb.toString();
 
-	    // TODO: Implementar este método
+
+	      // TODO: Implementar este método
 	    // El string devuelto tiene que tener el formato que tenéis a continuación (los valores de distancia y camino son solamente ilustrativos)
 	    
 	    //	    Vertex		Distance	Path
@@ -95,7 +103,6 @@ public class PathPrinter {
 	    
 	    // Para imprimir el camino podéis ayudaros del método printPath() que ya está implementado
 	    
-	    return sb.toString();
 	}
 
 
@@ -105,22 +112,34 @@ public class PathPrinter {
 	 * @param src El vértice origen
 	 */
 	public void dijkstra (int graph[][], int src) {
-		// TODO: Implementar este método
-		
+
 		// Almacenamos el nodo origen en la variable privada src de la clase
 		this.src = src;
 		
 		// El array de salida: dist[i] contendrá la distancia menor desde src hasta i
 		dist = new int[V];
 
+
 		// Declaramos el array sptSet[]. sptSet[i] será cierto si el vértice i está incluído en el shortest path tree o si la distancia más corta desde
 		// src a i ha finalizado
 
+		boolean [] spSet = new boolean[V];
+
 		// Inicializamos el array de padres para almacenar el shortest path tree
-		
+
+		parent = new int[V];
+		parent[src] = -1;
+
 		// Inicializamos todas las distancias como INFINITO y sptSet[] a falso
+		for(int i = 0; i<graph.length; i++){
+			dist[i] = Integer.MAX_VALUE;
+			spSet[i] = false;
+
+		}
 
 		// La distancia del vértice origen hasta sí mismo siempre será 0
+
+		this.dist[src] = 0;
 
 		// Iniciamos el bucle para encontrar el camino mínimo para todos los vértices
 			// Encontrar el vértice a mínima distancia del conjunto de vértices aún no procesados. u siempre es igual a
@@ -131,7 +150,45 @@ public class PathPrinter {
 			// Actualizamos el valor de dist para todos los vértices adyacentes al vértice escogido
 				// Actualizar dist[v] sólo si no está dentro de sptSet, existe una arista desde u a v y el peso total
 				// del camino desde src hasta v a través de u es más pequeño que el valor actual de dist[v]
-				// También marcaremos que el padre de v es u 
+				// También marcaremos que el padre de v es u
+
+		while(!containsAll(spSet)){
+			int u = minDistance(spSet);
+			spSet[u] = true;
+			for(int v = 0; v < V; v++){
+				int edge = graph[u][v];
+				if(edge > 0){
+					int weight = weight(graph,v,u);
+					if( (spSet[v] == false) &&  (weight < dist[v])){
+						dist[v] = weight;
+						parent[v] = u;
+					}
+				}
+			}
+		}
+	}
+
+
+	private int weight(int graph[][],int v, int u){
+		int father = u;
+		int child = v;
+		int weight = 0;
+		while(father!=src){
+			weight+= graph[father][child];
+			child = father;
+			father = parent[father];
+		}
+		weight+=graph[father][child];;
+		return weight;
+	}
+
+	private boolean containsAll(boolean [] spSet){
+		for(int i = 0; i< spSet.length ; i++){
+			if(spSet[i] == false){
+				return false;
+			}
+		}
+		return true;
 	}
 
 
@@ -152,56 +209,56 @@ public class PathPrinter {
                                {0, 0, 2, 0, 0, 0, 6, 7, 0}
                               };
 
-        PathPrinter t = new PathPrinter();
-        t.dijkstra (graph, 0);
+		PathPrinter t = new PathPrinter();
+		t.dijkstra (graph, 0);
 
-        if (t.printSolution().contains ("3		19")) { 
-    		System.out.println ("Test Unitario 1 - OK.");
-    	} else {
-    		System.err.println ("Test Unitario 1 - KO - el método no devuelve bien la solución: " + t.printSolution());
-    	}
-        
-        if (t.printSolution().contains ("1		4")) { 
-    		System.out.println ("Test Unitario 2 - OK.");
-    	} else {
-    		System.err.println ("Test Unitario 2 - KO - el método no devuelve bien la solución: " + t.printSolution());
-    	}
+		if (t.printSolution().contains ("3		19")) {
+			System.out.println ("Test Unitario 1 - OK.");
+		} else {
+			System.err.println ("Test Unitario 1 - KO - el método no devuelve bien la solución: " + t.printSolution());
+		}
 
-        if (t.printSolution().contains ("5		11")) { 
-    		System.out.println ("Test Unitario 3 - OK.");
-    	} else {
-    		System.err.println ("Test Unitario 3 - KO - el método no devuelve bien la solución: " + t.printSolution());
-    	}
+		if (t.printSolution().contains ("1		4")) {
+			System.out.println ("Test Unitario 2 - OK.");
+		} else {
+			System.err.println ("Test Unitario 2 - KO - el método no devuelve bien la solución: " + t.printSolution());
+		}
 
-        if (t.printSolution().contains ("8		14")) { 
-    		System.out.println ("Test Unitario 4 - OK.");
-    	} else {
-    		System.err.println ("Test Unitario 4 - KO - el método no devuelve bien la solución: " + t.printSolution());
-    	}
+		if (t.printSolution().contains ("5		11")) {
+			System.out.println ("Test Unitario 3 - OK.");
+		} else {
+			System.err.println ("Test Unitario 3 - KO - el método no devuelve bien la solución: " + t.printSolution());
+		}
 
-        if (t.printSolutionWithPath().contains ("0 -> 4		 21		0 7 6 5 4")) { 
-    		System.out.println ("Test Unitario 5 - OK.");
-    	} else {
-    		System.err.println ("Test Unitario 5 - KO - el método no devuelve bien la solución: " + t.printSolutionWithPath());
-    	}
+		if (t.printSolution().contains ("8		14")) {
+			System.out.println ("Test Unitario 4 - OK.");
+		} else {
+			System.err.println ("Test Unitario 4 - KO - el método no devuelve bien la solución: " + t.printSolution());
+		}
 
-        if (t.printSolutionWithPath().contains ("0 -> 6		 9		0 7 6")) { 
-    		System.out.println ("Test Unitario 6 - OK.");
-    	} else {
-    		System.err.println ("Test Unitario 6 - KO - el método no devuelve bien la solución: " + t.printSolutionWithPath());
-    	}
-        
-        if (t.printSolutionWithPath().contains ("0 -> 8		 14		0 1 2 8")) { 
-    		System.out.println ("Test Unitario 7 - OK.");
-    	} else {
-    		System.err.println ("Test Unitario 7 - KO - el método no devuelve bien la solución: " + t.printSolutionWithPath());
-    	}
-        
-        if (t.printSolutionWithPath().contains ("0 -> 3		 19		0 1 2 3")) { 
-    		System.out.println ("Test Unitario 8 - OK.");
-    	} else {
-    		System.err.println ("Test Unitario 8 - KO - el método no devuelve bien la solución: " + t.printSolutionWithPath());
-    	}
+		if (t.printSolutionWithPath().contains ("0 -> 4		 21		0 7 6 5 4")) {
+			System.out.println ("Test Unitario 5 - OK.");
+		} else {
+			System.err.println ("Test Unitario 5 - KO - el método no devuelve bien la solución: " + t.printSolutionWithPath());
+		}
+
+		if (t.printSolutionWithPath().contains ("0 -> 6		 9		0 7 6")) {
+			System.out.println ("Test Unitario 6 - OK.");
+		} else {
+			System.err.println ("Test Unitario 6 - KO - el método no devuelve bien la solución: " + t.printSolutionWithPath());
+		}
+
+		if (t.printSolutionWithPath().contains ("0 -> 8		 14		0 1 2 8")) {
+			System.out.println ("Test Unitario 7 - OK.");
+		} else {
+			System.err.println ("Test Unitario 7 - KO - el método no devuelve bien la solución: " + t.printSolutionWithPath());
+		}
+
+		if (t.printSolutionWithPath().contains ("0 -> 3		 19		0 1 2 3")) {
+			System.out.println ("Test Unitario 8 - OK.");
+		} else {
+			System.err.println ("Test Unitario 8 - KO - el método no devuelve bien la solución: " + t.printSolutionWithPath());
+		}
         
         
         System.out.println (t.printSolution());
