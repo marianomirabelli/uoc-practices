@@ -142,15 +142,13 @@ public class PathPrinter {
 		this.dist[src] = 0;
 
 		// Iniciamos el bucle para encontrar el camino mínimo para todos los vértices
-			// Encontrar el vértice a mínima distancia del conjunto de vértices aún no procesados. u siempre es igual a
-			// src en la primera iteración. Podéis utilizar la función proporcionada minDistance()
-
-			// Marcamos el vértice tratado como procesado
-
-			// Actualizamos el valor de dist para todos los vértices adyacentes al vértice escogido
-				// Actualizar dist[v] sólo si no está dentro de sptSet, existe una arista desde u a v y el peso total
-				// del camino desde src hasta v a través de u es más pequeño que el valor actual de dist[v]
-				// También marcaremos que el padre de v es u
+		// Encontrar el vértice a mínima distancia del conjunto de vértices aún no procesados. u siempre es igual a
+		// src en la primera iteración. Podéis utilizar la función proporcionada minDistance()
+		// Marcamos el vértice tratado como procesado
+		// Actualizamos el valor de dist para todos los vértices adyacentes al vértice escogido
+		// Actualizar dist[v] sólo si no está dentro de sptSet, existe una arista desde u a v y el peso total
+		// del camino desde src hasta v a través de u es más pequeño que el valor actual de dist[v]
+		// También marcaremos que el padre de v es u
 
 		while(!containsAll(spSet)){
 			int u = minDistance(spSet);
